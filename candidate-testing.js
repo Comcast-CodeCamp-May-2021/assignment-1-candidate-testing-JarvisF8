@@ -3,23 +3,47 @@ const input = require('readline-sync');
 // TODO 2: modify your quiz app to ask 5 questions //
 
 // TODO 1.1a: Define candidateName // 
-let candidateName;
+let candidateName = "";
 // TODO 1.2a: Define question, correctAnswer, and candidateAnswer //
-let question;
-let correctAnswer;
-let candidateAnswer;
-let questions;
-let correctAnswers;
-let candidateAnswers;
+let question = "Who was the first American woman in space? ";
+let correctAnswer = "Sally Ride";
+let candidateAnswer = "";
+let questions = [
+  "Who was the first American woman in space? ", "True or false: 5 kilometer == 5000 meters? ", "(5 + 3)/2 * 10 = ? ", "Given the array [8, 'Orbit', 'Trajectory', 45], what entry is at index 2? ", "What is the minimum crew size for the ISS? "
+  ];
+let correctAnswers = ["Sally Ride", "true", "40", "Trajectory", "3"];
+let candidateAnswers = [];
 
 
 function askForName() {
   // TODO 1.1b: Ask for candidate's name //
-
+  candidateName = input.question("Please enter your full name: ");
+    while (isNaN(candidateName) === false || candidateName.length <= 5){
+      if (isNaN(candidateName) === false){
+        console.log();
+        console.log("You're not a number, you're a FREE MAN (or WOMAN)!");
+        console.log();
+        candidateName = input.question("Please enter your full name: ");
+      } else {
+        console.log();
+        candidateName = input.question("Please enter your FULL name: ");
+      }
+    }
+  console.log();  
+  console.log(`Welcome ${candidateName}.`);
+  console.log();
+  return candidateName;
 }
 
 function askQuestion() {
   // TODO 1.2b: Ask candidate the question and assign the response as candidateAnswer //
+  for (i = 0; i < questions.length; i++){
+    console.log((i +1) + ")",questions[i]);
+    candidateAnswers[i] = input.question("Your Answer: ");
+    console.log("Correct Answer:", correctAnswers[i]);
+    console.log();
+  }
+  return candidateAnswers;  
 
 
 }
@@ -27,10 +51,24 @@ function askQuestion() {
 function gradeQuiz(candidateAnswers) {
 
   // TODO 1.2c: Let the candidate know if they have answered the question correctly or incorrectly // 
-
-
+  candidateAnswers = candidateAnswers.join(",").toLowerCase().split(",");
+  correctAnswers = correctAnswers.join(",").toLowerCase().split(",");
   let grade;
-  
+  let correct = 0;
+  for (i = 0; i < questions.length; i++){
+    if (candidateAnswers[i] === correctAnswers[i]){
+      correct += 1;
+    }
+  }  
+  grade = (correct / questions.length) * 100;
+
+  if (grade >= 80) {
+    console.log(`>>>  Overall Grade: ${grade}% (${correct} out of ${questions.length} correct) <<<`)
+    console.log(`>>>  Status: PASS  <<<`)
+  } else {
+        console.log(`>>>  Overall Grade: ${grade}% (${correct} out of ${questions.length} correct) <<<`)
+        console.log(`>>>  Status: FAIL  <<<`)
+  }
 
   return grade;
 }
